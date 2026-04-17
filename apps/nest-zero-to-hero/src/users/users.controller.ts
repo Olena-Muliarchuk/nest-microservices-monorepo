@@ -16,8 +16,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
-import { Role } from '@app/contracts';
-import { Auth } from '@app/nest-zero-to-hero/auth/decorators/auth.decorator';
+// import { Role } from '@app/contracts';
+// import { Auth } from '@app/nest-zero-to-hero/auth/decorators/auth.decorator';
 
 @ApiTags('users')
 @Controller('users')
@@ -32,7 +32,7 @@ export class UsersController {
 
   @Get()
   @ApiOperation({ summary: 'Get all users (Admin only)' })
-  @Auth(Role.Admin)
+  // @Auth(Role.Admin)
   findAll(
     @Query('includeDeleted', new DefaultValuePipe(false), ParseBoolPipe) includeDeleted: boolean,
   ) {
@@ -40,14 +40,14 @@ export class UsersController {
   }
 
   @Get(':id')
-  @Auth()
+  // @Auth()
   @ApiOperation({ summary: 'Get a user by ID' })
   findOne(@Param('id', ParseIntPipe) id: number): Promise<User> {
     return this.usersService.findOne(id);
   }
 
   @Put(':id')
-  @Auth()
+  // @Auth()
   @ApiOperation({ summary: 'Update a user (own profile or admin)' })
   update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
@@ -55,14 +55,14 @@ export class UsersController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a user (Admin only)' })
-  @Auth(Role.Admin)
+  // @Auth(Role.Admin)
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.remove(id);
   }
 
   @Post(':id')
   @ApiOperation({ summary: 'Restore a user (Admin only)' })
-  @Auth(Role.Admin)
+  // @Auth(Role.Admin)
   restore(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.restore(id);
   }

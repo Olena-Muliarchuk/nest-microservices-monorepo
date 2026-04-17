@@ -1,9 +1,10 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
+import { Injectable } from '@nestjs/common';
+import { UsersService } from '@app/nest-zero-to-hero/users/users.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { ActiveUser } from '@app/contracts';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class AuthService {
@@ -75,17 +76,17 @@ export class AuthService {
   async refreshTokens(user: ActiveUser) {
     const userEntity = await this.usersService.findOne(user.userId);
     if (!userEntity || !userEntity.hashedRefreshToken) {
-      throw new UnauthorizedException('Access Denied');
+      throw new RpcException('Access Denied');
     }
 
     if (!user.refreshToken) {
-      throw new UnauthorizedException('Access Denied');
+      throw new RpcException('Access Denied');
     }
     const refreshToken = user.refreshToken;
     const refreshTokenMatches = await bcrypt.compare(refreshToken, userEntity.hashedRefreshToken);
 
     if (!refreshTokenMatches) {
-      throw new UnauthorizedException('Access Denied');
+      throw new RpcException('Access Denied');
     }
 
     const tokens = await this.generateTokens({
