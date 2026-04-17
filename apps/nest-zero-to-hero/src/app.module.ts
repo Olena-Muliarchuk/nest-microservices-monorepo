@@ -7,7 +7,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { validateEnv } from './env.validation';
 import { ArtistsModule } from './artists/artists.module';
 import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
 import { PlaylistsModule } from './playlists/playlists.module';
 import { AdminModule } from './admin/admin.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -62,7 +61,6 @@ import { EventsModule } from './events/events.module';
     SongsModule,
     ArtistsModule,
     UsersModule,
-    AuthModule,
     PlaylistsModule,
     AdminModule,
     SeedModule,
