@@ -1,11 +1,25 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ApiGatewayController } from './api-gateway.controller';
 import { ApiGatewayService } from './api-gateway.service';
-import { GatewayAuthController } from './auth.controller';
+import { GatewayAuthController } from './auth/auth.controller';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { validateEnv } from '@app/nest-zero-to-hero/env.validation';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validate: validateEnv,
+    }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.getOrThrow<string>('JWT_SECRET'),
+      }),
+      inject: [ConfigService],
+    }),
     ClientsModule.register([
       {
         name: 'HERO_SERVICE', // Uniqe token
