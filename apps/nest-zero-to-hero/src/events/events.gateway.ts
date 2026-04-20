@@ -10,7 +10,7 @@ import { Server } from 'socket.io';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { AuthenticatedSocket } from './types/socket.types';
-import { JwtPayload } from '@app/contracts';
+import { JwtPayload, Role } from '@app/contracts';
 
 @WebSocketGateway({
   cors: { origin: '*' },
@@ -22,7 +22,7 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGate
   server!: Server;
 
   constructor(
-    private readonly jwtService: JwtService,
+    // private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {}
 
@@ -40,17 +40,19 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGate
         throw new Error('No token provided');
       }
 
-      const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
+      // const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : authHeader;
 
-      const payload = await this.jwtService.verifyAsync<JwtPayload>(token, {
-        secret: this.configService.getOrThrow<string>('JWT_SECRET'),
-      });
+      // const payload = await this.jwtService.verifyAsync<JwtPayload>(token, {
+      //   secret: this.configService.getOrThrow<string>('JWT_SECRET'),
+      // });
 
-      client.data.user = payload;
+      // client.data.user = payload;
 
-      await client.join(`user:${payload.sub}`);
+      client.data.user = { sub: 1, email: 'ws-mock@example.com', role: Role.User };
 
-      this.logger.log(`🟢 Client connected: ${client.id} (User: ${payload.sub})`);
+      // await client.join(`user:${payload.sub}`);
+
+      // this.logger.log(`🟢 Client connected: ${client.id} (User: ${payload.sub})`);
     } catch (error) {
       this.logger.warn(`🔴 Unauthorized: ${client.id}`);
       client.disconnect(true);

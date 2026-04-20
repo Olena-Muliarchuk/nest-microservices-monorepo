@@ -13,12 +13,12 @@ import { Role } from '@app/contracts';
 import { ApiTags, ApiOperation, ApiConsumes, ApiBody } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
-import { Auth } from '@app/nest-zero-to-hero/auth/decorators/auth.decorator';
+// import { Auth } from '@app/nest-zero-to-hero/auth/decorators/auth.decorator';
 import { StorageService } from '@app/nest-zero-to-hero/storage/storage.service';
 
 @ApiTags('admin')
 @Controller('admin')
-@Auth(Role.Admin)
+// @Auth(Role.Admin)
 export class AdminController {
   constructor(
     private readonly adminService: AdminService,
