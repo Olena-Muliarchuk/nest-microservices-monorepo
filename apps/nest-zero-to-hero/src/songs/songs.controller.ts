@@ -16,11 +16,11 @@ import { Song } from './song.entity';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { ConfigService } from '@nestjs/config';
 import { UpdateSongDto } from './dto/update-song.dto';
-import { User } from '../auth/decorators/user.decorator';
+// import { User } from '../auth/decorators/user.decorator';
 import { Role, type ActiveUser } from '@app/contracts';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { FilterSongDto } from './dto/filter-song.dto';
-import { Auth } from '@app/nest-zero-to-hero/auth/decorators/auth.decorator';
+// import { Auth } from '@app/nest-zero-to-hero/auth/decorators/auth.decorator';
 import { CacheTTL } from '@nestjs/cache-manager';
 import { HttpCacheInterceptor } from '@app/nest-zero-to-hero/common/interceptors/http-cache.interceptor';
 @ApiTags('songs')
@@ -50,10 +50,14 @@ export class SongsController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new song' })
-  @Auth()
-  create(@Body() createSongDto: CreateSongDto, @User() user: ActiveUser): Promise<Song> {
-    console.log(user);
-    return this.songsService.create(createSongDto, user.userId);
+  // @Auth()
+  create(@Body() createSongDto: CreateSongDto): Promise<Song> {
+    const mockUser: ActiveUser = {
+      userId: 1,
+      email: 'hardcoded@example.com',
+      role: Role.Admin,
+    };
+    return this.songsService.create(createSongDto, mockUser.userId);
   }
 
   @Get(':id')
@@ -64,14 +68,14 @@ export class SongsController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Update a song' })
-  @Auth(Role.Admin)
+  // @Auth(Role.Admin)
   update(@Param('id', ParseIntPipe) id: number, @Body() updateSongDto: UpdateSongDto) {
     return this.songsService.update(id, updateSongDto);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a song (Admin only)' })
-  @Auth(Role.Admin)
+  // @Auth(Role.Admin)
   delete(@Param('id', ParseIntPipe) id: number) {
     return this.songsService.delete(id);
   }

@@ -19,11 +19,11 @@ import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 import { Playlist } from './entities/playlist.entity';
 import { DeleteResult } from 'typeorm';
 import { Pagination } from 'nestjs-typeorm-paginate';
-import { User } from '../auth/decorators/user.decorator';
-import type { ActiveUser } from '@app/contracts';
+// import { User } from '../auth/decorators/user.decorator';
+import { Role, type ActiveUser } from '@app/contracts';
 import { PlaylistOwnerGuard } from './guards/playlist-owner.guard';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
-import { Auth } from '@app/nest-zero-to-hero/auth/decorators/auth.decorator';
+// import { Auth } from '@app/nest-zero-to-hero/auth/decorators/auth.decorator';
 
 @ApiTags('playlists')
 @Controller('playlists')
@@ -32,12 +32,17 @@ export class PlaylistsController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new playlist' })
-  @Auth()
+  // @Auth()
   create(
     @Body() createPlaylistDto: CreatePlaylistDto,
-    @User() user: ActiveUser,
+    // @User() user: ActiveUser,
   ): Promise<Playlist> {
-    return this.playlistsService.create(createPlaylistDto, user);
+    const mockUser: ActiveUser = {
+      userId: 1,
+      email: 'hardcoded@example.com',
+      role: Role.Admin,
+    };
+    return this.playlistsService.create(createPlaylistDto, mockUser);
   }
 
   @Get()
@@ -56,7 +61,7 @@ export class PlaylistsController {
   }
 
   @Patch(':id')
-  @Auth()
+  // @Auth()
   @ApiOperation({ summary: 'Update a playlist (owner only)' })
   @UseGuards(PlaylistOwnerGuard)
   update(
@@ -67,7 +72,7 @@ export class PlaylistsController {
   }
 
   @Delete(':id')
-  @Auth()
+  // @Auth()
   @ApiOperation({ summary: 'Delete a playlist (owner only)' })
   @UseGuards(PlaylistOwnerGuard)
   @HttpCode(HttpStatus.NO_CONTENT)

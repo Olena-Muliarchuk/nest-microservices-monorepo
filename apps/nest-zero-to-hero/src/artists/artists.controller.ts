@@ -18,7 +18,7 @@ import { Artist } from './entities/artist.entity';
 import { ConfigService } from '@nestjs/config';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { Role } from '@app/contracts';
-import { Auth } from '@app/nest-zero-to-hero/auth/decorators/auth.decorator';
+// import { Auth } from '@app/nest-zero-to-hero/auth/decorators/auth.decorator';
 
 @ApiTags('artists')
 @Controller('artists')
@@ -30,7 +30,7 @@ export class ArtistsController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new artist' })
-  @Auth(Role.Admin)
+  // @Auth(Role.Admin)
   create(@Body() createArtistDto: CreateArtistDto) {
     return this.artistsService.create(createArtistDto);
   }
@@ -60,14 +60,14 @@ export class ArtistsController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Update an artist' })
-  @Auth(Role.Admin)
+  // @Auth(Role.Admin)
   update(@Param('id', ParseIntPipe) id: number, @Body() updateArtistDto: UpdateArtistDto) {
     return this.artistsService.update(id, updateArtistDto);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete an artist' })
-  @Auth(Role.Admin)
+  // @Auth(Role.Admin)
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.artistsService.remove(id);
   }

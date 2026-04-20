@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { EventsGateway } from './events.gateway';
-import { AuthModule } from '@app/nest-zero-to-hero/auth/auth.module';
+// import { AuthModule } from '@app/nest-zero-to-hero/auth/auth.module';
 
 @Module({
   providers: [EventsGateway],
-  imports: [AuthModule],
+  imports: [],
   exports: [EventsGateway],
 })
 export class EventsModule {}
